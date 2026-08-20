@@ -1,0 +1,49 @@
+/* Dev-server demo page styles only - not part of the shipped component. */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+}
+
+.demo-layout {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+/* The component declares height: 100%, so the host has to supply a definite height. A
+   viewport-tall sticky column is the realistic case: the sidebar stays put while the content
+   scrolls, rather than stretching to the full document height. */
+.demo-layout > aside {
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.demo-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 1.5rem 2rem;
+}
+
+.demo-switch {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.demo-switch button {
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.demo-switch button[aria-pressed='true'] {
+  background: #0a3d67;
+  border-color: #0a3d67;
+  color: #fff;
+}

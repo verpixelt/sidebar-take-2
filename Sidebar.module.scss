@@ -1,0 +1,311 @@
+// Adjust to match your design system's actual "M" breakpoint token -
+// the spec switches to the mobile layout from breakpoint M downward.
+$breakpoint-m: 768px;
+
+// Width of the collapsed icon rail: icon + comfortable touch target either side.
+$rail-width: 4rem;
+
+// Hides content visually while leaving it in the accessibility tree. display: none or
+// visibility: hidden would remove it from both.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.srOnly {
+  @include visually-hidden;
+}
+
+$color-border: #e0e0e0;
+$color-hover: #f2f2f2;
+$color-text: #1a1a1a;
+$color-muted: #666;
+$color-primary: #0a3d67;
+$color-focus: #005fa3;
+$color-info: #d4a800;
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 320px; // adjust to match your design tokens
+  // As a flex item the declared width is only a basis and would otherwise be shrunk by a
+  // wide content column - which also squashes the icon rail below its intended width.
+  flex: 0 0 auto;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 1rem 0;
+  background-color: #fff;
+  border-right: 1px solid $color-border;
+  color: $color-text;
+
+  @media (max-width: $breakpoint-m) {
+    // The secondary nav (children) moves into the app's burger menu on mobile,
+    // and the functions list becomes the disclosure popover below - so the
+    // sidebar itself has nothing left to render at this breakpoint.
+    display: none;
+  }
+}
+
+// variant="icon": a narrow rail above the M breakpoint. Below it the rail is hidden along
+// with the full variant, and both fall back to the same floating disclosure button.
+.iconVariant {
+  transition: width 0.2s ease;
+}
+
+// Collapsed state of the icon rail. Everything that is text-only is dropped; only the
+// function icons (and, above the breakpoint, the rail toggle) survive.
+.collapsed {
+  width: $rail-width;
+
+  // The chevron deliberately survives here - it is the control that expands the nav.
+  .areaTitle,
+  .areaNav,
+  .functionLabel {
+    display: none;
+  }
+
+  // Keeps the functions pinned to the bottom exactly as the expanded state does (where the
+  // flexible .areaNav pushes them down), so toggling does not make the icons jump.
+  .functionsNav {
+    margin-top: auto;
+  }
+
+  .functionButton {
+    padding-left: 0.625rem;
+    padding-right: 0;
+  }
+
+  .functionIcon {
+    margin-right: 0;
+  }
+
+  .divider {
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+  }
+}
+
+// The chevron is its own control in the icon variant, so the row has to lay the two buttons
+// out side by side instead of the label stretching inside a single button.
+.iconVariant {
+  .functionItem {
+    display: flex;
+    align-items: center;
+  }
+
+  .functionButton {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+.chevronButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 2.25rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-hover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-focus;
+    outline-offset: -2px;
+  }
+
+  .chevron {
+    margin-left: 0;
+    transition: transform 0.2s ease;
+  }
+}
+
+.chevronExpanded {
+  transform: rotate(180deg);
+}
+
+.areaTitle {
+  margin: 0 0 0.75rem;
+  padding: 0 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.areaNav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.functionsNav {
+  flex: 0 0 auto;
+  border-top: 1px solid $color-border;
+  padding-top: 0.5rem;
+}
+
+.functionList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.helpList {
+  margin-top: 1.5rem; // wider gap before the pinned help item, per the anatomy spec
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin: 0.5rem 1.25rem;
+}
+
+.functionItem {
+  margin: 0;
+}
+
+.functionButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.625rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+
+  &:hover {
+    background-color: $color-hover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-focus;
+    outline-offset: -2px;
+  }
+}
+
+.functionIcon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.functionLabel {
+  flex: 1 1 auto;
+}
+
+.chevron {
+  margin-left: 0.5rem;
+  color: $color-muted;
+}
+
+.newInfoBadge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: $color-info;
+  border: 1px solid #fff;
+}
+
+// Mobile: floating disclosure button + popover, replacing the desktop functions nav.
+.mobileDisclosure {
+  display: none;
+
+  @media (max-width: $breakpoint-m) {
+    display: block;
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 100;
+  }
+}
+
+.disclosureButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background-color: $color-primary;
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+  &:focus-visible {
+    outline: 2px solid $color-focus;
+    outline-offset: 2px;
+  }
+}
+
+.disclosureIcon {
+  line-height: 1;
+}
+
+.popover {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  width: max-content;
+  max-width: 90vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  // No divider between groups and no chevrons in the mobile popover, per the spec.
+  // The rows are icons only, so the button collapses to a square touch target.
+  .functionButton {
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .functionIcon {
+    margin-right: 0;
+  }
+
+  // Hidden visually but kept in the accessibility tree, so every row still has its label as
+  // its accessible name. display: none would strip that and leave the buttons unnamed.
+  .functionLabel {
+    @include visually-hidden;
+  }
+}
+
+// Users who ask for reduced motion get the state change without the animation. Must come
+// after the rules that declare those transitions to win the cascade.
+@media (prefers-reduced-motion: reduce) {
+  .iconVariant,
+  .chevronButton .chevron,
+  .mobileDisclosure {
+    transition: none;
+  }
+}

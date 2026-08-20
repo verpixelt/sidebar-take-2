@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npx tsc *)",
+      "Bash(npx vite *)",
+      "Read(//Users/kevin.lorenz/Library/Caches/ms-playwright/**)",
+      "Bash(npm ls *)",
+      "Bash(npm init *)",
+      "Bash(curl -s -o /dev/null http://localhost:5199/)",
+      "Bash(break)",
+      "Bash(node test-mobile.mjs)",
+      "Bash(npx playwright *)"
+    ]
+  }
+}
